@@ -1,0 +1,12 @@
+{
+  "options" : {
+    "port": 8888,
+    "host": "",
+    "protocol": "<kontakt.io protocol e.g. tls>",
+    "username": "<any username>",
+    "password": "<kontakt.io ApiKey>"
+  },
+  "subscribe": {
+    "streams": ["<kontakt.io stream paths>"]
+  }
+}
