@@ -19,7 +19,6 @@
 */
 var fs = require('fs')
 
-
 /*
 * Firebase Setup
 */
@@ -59,7 +58,7 @@ var moment = require('moment')
 */
 
 var mqtt = require('mqtt')
-//var kt = fs.readFileSync('kontaktio/config.json')
+
 fs.readFile('kontaktio/config.json', (err, data) => {
   if (err) throw err;
   var kt = JSON.parse(data.toString());
