@@ -30,6 +30,10 @@ admin.initializeApp({
   databaseURL: 'https://fallsensor-dbabf.firebaseio.com'
 })
 
+/*
+* Messaging  with Firebase Setup
+*/
+const TOPIC_FALL = "Fall";
 var Messaging = require('custom/messaging.js')
 var _messaging = new Messaging(admin, true)
 
@@ -40,6 +44,7 @@ var _messaging = new Messaging(admin, true)
 var SenseFall = require('custom/sensefall.js')
 var _senseFall = new SenseFall(true)
 _senseFall.setWindowSize(30)
+_senseFall.setSensitivity(32);
 
 /*
 * Util Setup
@@ -66,6 +71,8 @@ fs.readFile('kontaktio/config.json', (err, data) => {
   const TOPIC_SEPERATOR = '/'
   const INDEX_SENSOR_UNIQUE_ID = 2 // e.g. /stream/[:uniqueId]/accelerometer, index is 2 after string split
 
+  console.log(kt.options);
+  
   var options = {
     port: kt.options.port,
     host: kt.options.host,
@@ -115,11 +122,17 @@ fs.readFile('kontaktio/config.json', (err, data) => {
         */
         _senseFall.addData(xVal, yVal, zVal)
 
-        if (_senseFall.isTriggered()) {
-          console.log('============== FALL!!! ==============')
-          _senseFall.reset();
-          _messaging.buildPayload('title', 'message', {})
-        }
+//        if (_senseFall.isTriggered()) {
+//          console.log('============== FALL!!! ==============')
+//          _senseFall.reset();
+//          
+//          /*
+//          * Send notification to all devices which have registered to topic "Fall"
+//          */
+//          var payload = _messaging.buildPayload('Alert', 'Fall detected!', {})
+//          _messaging.send(TOPIC_FALL, payload)
+//        }
+        
       } else {
         // cant find any associate type
       }
