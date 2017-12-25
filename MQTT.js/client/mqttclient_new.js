@@ -42,9 +42,16 @@ var _messaging = new Messaging(admin, true)
 */
 
 var SenseFall = require('custom/sensefall.js')
-var _senseFall = new SenseFall(true)
+var _senseFall = new SenseFall(false)
 _senseFall.setWindowSize(30)
 _senseFall.setSensitivity(32);
+
+/*
+* Sense Posture Setup
+*/
+
+var SensePosture = require('custom/sensePosture.js')
+var _sensePosture = new SensePosture(false)
 
 /*
 * Util Setup
@@ -71,7 +78,7 @@ fs.readFile('kontaktio/config.json', (err, data) => {
   const TOPIC_SEPERATOR = '/'
   const INDEX_SENSOR_UNIQUE_ID = 2 // e.g. /stream/[:uniqueId]/accelerometer, index is 2 after string split
 
-  console.log(kt.options);
+//  console.log(kt.options);
   
   var options = {
     port: kt.options.port,
@@ -82,7 +89,7 @@ fs.readFile('kontaktio/config.json', (err, data) => {
     clientId: 'mqttjs_' + Math.random().toString(16).substr(2, 8)
   }
   
-  console.log('Start try to connect...')
+  console.log(moment().toString() + ': Start try to connect...')
   var client = mqtt.connect(options)
   client.subscribe(kt.subscribe.streams, {qos: 2})
   
@@ -102,7 +109,7 @@ fs.readFile('kontaktio/config.json', (err, data) => {
       * health format: {"batteryLevel":100,"deviceUtcTime":1512366631,"externalPower":false}
       * accelerometer format: {"lastDoubleTap":35,"lastThreshold":21497,"x":0,"y":-1,"z":30,"sensitivity":32}
       */
-      console.log(moment().toString() + ' > ' + beaconUniqueId + ': ' + message.toString())
+      log(moment().toString(), beaconUniqueId, message.toString())
 
       var msgObj = util.toJsonOject(message.toString())
       var type = util.ktMessageType(msgObj)
@@ -118,10 +125,15 @@ fs.readFile('kontaktio/config.json', (err, data) => {
         var zVal = msgObj.z
 
         /*
-        * Test sense fall module
+        * Sense fall module
         */
         _senseFall.addData(xVal, yVal, zVal)
 
+        /*
+        * Sense Posture module
+        */
+        var posture = _sensePosture.getPosture(_senseFall.getWindow(), yVal)
+        log(moment().toString(), beaconUniqueId, 'Posture is ' + posture)
 //        if (_senseFall.isTriggered()) {
 //          console.log('============== FALL!!! ==============')
 //          _senseFall.reset();
@@ -140,8 +152,12 @@ fs.readFile('kontaktio/config.json', (err, data) => {
   })
 
   client.on('connect', function () {
-    console.log('Connected')
+    console.log(moment().toString() + ': Connected')
   })
   
 });  
+
+function log(dateTime, deviceId, message) {
+  console.log(dateTime + ' > ' + deviceId + ': ' + message)
+}
 
