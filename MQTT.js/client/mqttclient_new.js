@@ -59,6 +59,12 @@ var _sensePosture = new SensePosture(false)
 var util = require('custom/util.js')
 
 /*
+* Elastic Search Setup
+*/
+var ElasticSearch = require('custom/elasticSearch.js')
+var _elasticSearch = new ElasticSearch(true);
+
+/*
 * Moment Setup
 */
 
@@ -134,6 +140,15 @@ fs.readFile('kontaktio/config.json', (err, data) => {
         */
         var posture = _sensePosture.getPosture(_senseFall.getWindow(), yVal)
         log(getCurrentDate(), beaconUniqueId, 'Posture is ' + posture)
+        
+        
+        /*
+        * TODO: 
+        * Insert records into elastic search for more accurate data reading 
+        * to detect fall
+        */
+//        _elasticSearch.insertRecord(beaconUniqueId, _elasticSearch.buildData(xVal, yVal, zVal, _senseFall.calculateGravity(xVal, yVal, zVal), -1, -1, -1, getCurrentDateMs()));
+        
 //        if (_senseFall.isTriggered()) {
 //          console.log('============== FALL!!! ==============')
 //          _senseFall.reset();
