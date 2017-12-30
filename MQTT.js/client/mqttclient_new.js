@@ -161,3 +161,11 @@ function log(dateTime, deviceId, message) {
   console.log(dateTime + ' > ' + deviceId + ': ' + message)
 }
 
+function getCurrentDate() {
+  return moment().toString();
+}
+
+function getCurrentDateMs() {
+  return  moment().valueOf();
+}
+
