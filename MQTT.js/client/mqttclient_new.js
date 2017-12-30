@@ -109,8 +109,8 @@ fs.readFile('kontaktio/config.json', (err, data) => {
       * health format: {"batteryLevel":100,"deviceUtcTime":1512366631,"externalPower":false}
       * accelerometer format: {"lastDoubleTap":35,"lastThreshold":21497,"x":0,"y":-1,"z":30,"sensitivity":32}
       */
-      log(moment().toString(), beaconUniqueId, message.toString())
-
+      log(getCurrentDate(), beaconUniqueId, message.toString())
+      
       var msgObj = util.toJsonOject(message.toString())
       var type = util.ktMessageType(msgObj)
 
@@ -133,7 +133,7 @@ fs.readFile('kontaktio/config.json', (err, data) => {
         * Sense Posture module
         */
         var posture = _sensePosture.getPosture(_senseFall.getWindow(), yVal)
-        log(moment().toString(), beaconUniqueId, 'Posture is ' + posture)
+        log(getCurrentDate(), beaconUniqueId, 'Posture is ' + posture)
 //        if (_senseFall.isTriggered()) {
 //          console.log('============== FALL!!! ==============')
 //          _senseFall.reset();
@@ -152,7 +152,7 @@ fs.readFile('kontaktio/config.json', (err, data) => {
   })
 
   client.on('connect', function () {
-    console.log(moment().toString() + ': Connected')
+    console.log(getCurrentDate() + ': Connected')
   })
   
 });  
